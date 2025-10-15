@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".SleepTrackerActivity">
+
+    <!-- Custom Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="@android:color/white"
+        android:elevation="4dp" />
+
+    <!-- Content -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sleep Tracker"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"/>
+
+    <EditText
+        android:id="@+id/etSleepGoal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sleep Goal (e.g., 8 hours)" />
+
+    <EditText
+        android:id="@+id/etBedtime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bedtime (e.g., 10:00 PM)" />
+
+    <EditText
+        android:id="@+id/etWakeUpTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Wake-up Time (e.g., 6:00 AM)" />
+
+    <Button
+        android:id="@+id/btnSaveSleep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Sleep Goals"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
