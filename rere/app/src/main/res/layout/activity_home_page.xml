@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:rowCount="3"
+    android:background="@color/white"
+    android:padding="16dp"
+    tools:context=".HomePageActivity">
+
+    <Button
+        android:id="@+id/btnAddMed"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:text="Add Medication" />
+
+    <Button
+        android:id="@+id/btnRemoveMed"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:text="Remove Medication" />
+
+    <Button
+        android:id="@+id/btnSleepTracker"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:text="Sleep Tracker" />
+
+    <Button
+        android:id="@+id/btnAppointmentTracker"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:text="Appointment Tracker" />
+
+    <Button
+        android:id="@+id/btnTherapy"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:text="Therapy" />
+
+</GridLayout>
