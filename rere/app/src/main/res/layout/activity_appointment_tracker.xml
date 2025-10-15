@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".AppointmentTrackerActivity">
+
+    <!-- Custom Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="@android:color/white"
+        android:elevation="4dp" />
+
+    <!-- Content -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Appointment Tracker"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"/>
+
+    <EditText
+        android:id="@+id/etClinicName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Clinic Name" />
+
+    <EditText
+        android:id="@+id/etAppointmentDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Appointment Date (e.g., 25-12-2025)"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/etAppointmentTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Appointment Time (e.g., 2:00 PM)"
+        android:inputType="time" />
+
+    <Button
+        android:id="@+id/btnSaveAppointment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Appointment"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

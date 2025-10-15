@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".AddMedicationActivity">
+
+    <!-- Custom Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:titleTextColor="@android:color/white"
+        android:elevation="4dp" />
+
+    <!-- Content -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Medication"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"/>
+
+    <EditText
+        android:id="@+id/etMedicationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Medication Name" />
+
+    <EditText
+        android:id="@+id/etDosage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Dosage (e.g., 500mg)" />
+
+    <EditText
+        android:id="@+id/etFrequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Frequency (e.g., Twice a day)" />
+
+    <Button
+        android:id="@+id/btnSaveMedication"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Medication"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
