@@ -1,55 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white"
+    android:background="#FAF0FF"
+    android:fillViewport="true"
     tools:context=".AddMedicationActivity">
 
-    <!-- Custom Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:titleTextColor="@android:color/white"
-        android:elevation="4dp" />
-
-    <!-- Content -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add New Medication"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"/>
-
-    <EditText
-        android:id="@+id/etMedicationName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Medication Name" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etDosage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Dosage (e.g., 500mg)" />
+        <!-- Title -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Medication"
+            android:textColor="#333333"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="60dp"
+            android:paddingBottom="16dp" />
 
-    <EditText
-        android:id="@+id/etFrequency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Frequency (e.g., Twice a day)" />
+        <!-- Medication Name -->
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Medication Name"
+            android:inputType="textPersonName"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/btnSaveMedication"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Medication"
-        android:layout_marginTop="16dp"/>
+        <!-- Dosage -->
+        <EditText
+            android:id="@+id/editTextDosage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dosage"
+            android:inputType="text"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="8dp" />
 
-</LinearLayout>
+        <!-- Frequency -->
+        <EditText
+            android:id="@+id/editTextFrequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Frequency (e.g., Twice a day)"
+            android:inputType="text"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Medication"
+            android:textAllCaps="false"
+            android:backgroundTint="#7E57C2"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="12dp" />
+
+        <!-- Medication List Label -->
+        <TextView
+            android:id="@+id/listLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saved Medications:"
+            android:textStyle="bold"
+            android:textColor="#555555"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp" />
+
+        <!-- List Container -->
+        <LinearLayout
+            android:id="@+id/medicationListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp" />
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to Home"
+            android:backgroundTint="#FF7043"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,54 +1,98 @@
 package com.example.rere;
 
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.card.MaterialCardView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddMedicationActivity extends AppCompatActivity {
 
-    private EditText etMedicationName, etDosage, etFrequency;
-    private Button btnSaveMedication;
+    private EditText editTextName, editTextDosage, editTextFrequency;
+    private LinearLayout medicationListContainer;
+    private Button buttonSave, buttonBack;
+
+    private final List<String> medicationList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_medication);
 
-        // Set up custom toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Add Medication");
-        }
+        editTextName = findViewById(R.id.editTextName);
+        editTextDosage = findViewById(R.id.editTextDosage);
+        editTextFrequency = findViewById(R.id.editTextFrequency);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonBack = findViewById(R.id.buttonBack);
+        medicationListContainer = findViewById(R.id.medicationListContainer);
 
-        // Initialize views
-        etMedicationName = findViewById(R.id.etMedicationName);
-        etDosage = findViewById(R.id.etDosage);
-        etFrequency = findViewById(R.id.etFrequency);
-        btnSaveMedication = findViewById(R.id.btnSaveMedication);
+        // Stubbed Data (simulate database data)
+        medicationList.addAll(getStubbedMedications());
+        refreshMedicationList();
 
-        btnSaveMedication.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String medName = etMedicationName.getText().toString();
-                if (medName.isEmpty()) {
-                    Toast.makeText(AddMedicationActivity.this, "Medication name cannot be empty", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddMedicationActivity.this, medName + " saved!", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
+        // Save Button Logic
+        buttonSave.setOnClickListener(view -> saveMedication());
+
+        // Back Button Logic
+        buttonBack.setOnClickListener(view -> {
+            Intent intent = new Intent(AddMedicationActivity.this, HomePageActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+    private void saveMedication() {
+        String name = editTextName.getText().toString().trim();
+        String dosage = editTextDosage.getText().toString().trim();
+        String frequency = editTextFrequency.getText().toString().trim();
+
+        if (name.isEmpty() || dosage.isEmpty() || frequency.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        medicationList.add(name + " - " + dosage + " - " + frequency);
+        Toast.makeText(this, "Medication Saved!", Toast.LENGTH_SHORT).show();
+        refreshMedicationList();
+
+        // Clear fields
+        editTextName.setText("");
+        editTextDosage.setText("");
+        editTextFrequency.setText("");
+    }
+
+    private void refreshMedicationList() {
+        medicationListContainer.removeAllViews();
+        for (String item : medicationList) {
+            MaterialCardView card = new MaterialCardView(this);
+            card.setCardElevation(4);
+            card.setRadius(16);
+            card.setCardBackgroundColor(getColor(android.R.color.white));
+            card.setUseCompatPadding(true);
+            card.setContentPadding(24, 24, 24, 24);
+
+            TextView text = new TextView(this);
+            text.setText(item);
+            text.setTextSize(16);
+            text.setTextColor(getColor(android.R.color.black));
+
+            card.addView(text);
+            medicationListContainer.addView(card);
+        }
+    }
+
+    // Stubbed Medications
+    private List<String> getStubbedMedications() {
+        List<String> meds = new ArrayList<>();
+        meds.add("Aspirin - 100mg - Once a day");
+        meds.add("Ibuprofen - 200mg - Twice a day");
+        return meds;
     }
 }
