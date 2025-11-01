@@ -1,57 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white"
+    android:background="#FAF0FF"
+    android:fillViewport="true"
     tools:context=".AppointmentTrackerActivity">
 
-    <!-- Custom Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:titleTextColor="@android:color/white"
-        android:elevation="4dp" />
-
-    <!-- Content -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Appointment Tracker"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"/>
-
-    <EditText
-        android:id="@+id/etClinicName"
+    <LinearLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Clinic Name" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etAppointmentDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Appointment Date (e.g., 25-12-2025)"
-        android:inputType="date" />
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:titleTextColor="@android:color/white"
+            android:elevation="4dp" />
 
-    <EditText
-        android:id="@+id/etAppointmentTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#212121"
-        android:hint="@string/appointment_time_hint" />
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appointment Tracker"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/btnSaveAppointment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Appointment"
-        android:layout_marginTop="16dp" />
+        <!-- Clinic Name -->
+        <EditText
+            android:id="@+id/etClinicName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Clinic Name"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp"/>
 
-</LinearLayout>
+        <!-- Appointment Date -->
+        <EditText
+            android:id="@+id/etAppointmentDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Appointment Date (e.g., 25-12-2025)"
+            android:inputType="date"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Appointment Time -->
+        <EditText
+            android:id="@+id/etAppointmentTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Appointment Time (e.g., 2:00 PM)"
+            android:inputType="time"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveAppointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Appointment"
+            android:textAllCaps="false"
+            android:backgroundTint="#7E57C2"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Appointment List Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appointments:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Appointment List Container -->
+        <LinearLayout
+            android:id="@+id/appointmentListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to Home"
+            android:textAllCaps="false"
+            android:backgroundTint="#FF7043"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
+</ScrollView>
