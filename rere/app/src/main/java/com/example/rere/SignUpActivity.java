@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +13,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private EditText etFirstName, etUsername, etPassword;
     private Button btnSignUp;
+    private TextView tvSignInLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
+        tvSignInLink = findViewById(R.id.tvSignInLink);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,15 +33,23 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
 
-                // Simple validation to ensure fields are not empty
                 if (firstName.isEmpty() || username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Navigate to the Home Page
                     Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
                     startActivity(intent);
-                    finish(); // Prevents user from going back to the sign-up page
+                    finish();
                 }
+            }
+        });
+
+        // Navigate to Sign In
+        tvSignInLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

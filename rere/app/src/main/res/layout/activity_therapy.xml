@@ -1,50 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:background="#FAF0FF"
+    android:fillViewport="true"
     tools:context=".TherapyActivity">
 
-    <!-- Custom Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:titleTextColor="@android:color/white"
-        android:elevation="4dp" />
-
-    <!-- Content -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Therapy Session"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"/>
-
-    <EditText
-        android:id="@+id/etTherapyType"
+    <LinearLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Therapy Type (e.g., Physical Therapy)" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etTherapyTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Session Time (e.g., 4:00 PM)"
-        android:inputType="time"/>
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:titleTextColor="@android:color/white"
+            android:elevation="4dp" />
 
-    <Button
-        android:id="@+id/btnSaveTherapy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Therapy Session"
-        android:layout_marginTop="16dp"/>
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Therapy Session"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"/>
 
-</LinearLayout>
+        <!-- Therapy Type -->
+        <EditText
+            android:id="@+id/etTherapyType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Therapy Type (e.g., Physical Therapy)"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Session Time -->
+        <EditText
+            android:id="@+id/etTherapyTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Session Time (e.g., 4:00 PM)"
+            android:inputType="time"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveTherapy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Therapy Session"
+            android:textAllCaps="false"
+            android:backgroundTint="#7E57C2"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Therapy Sessions Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Therapy Sessions:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Therapy Sessions Container -->
+        <LinearLayout
+            android:id="@+id/therapyListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to Home"
+            android:textAllCaps="false"
+            android:backgroundTint="#FF7043"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
+</ScrollView>
