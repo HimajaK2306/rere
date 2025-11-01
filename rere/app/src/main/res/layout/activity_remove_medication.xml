@@ -1,44 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:background="#FAF0FF"
+    android:fillViewport="true"
     tools:context=".RemoveMedicationActivity">
 
-    <!-- Custom Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:titleTextColor="@android:color/white"
-        android:elevation="4dp" />
-
-    <!-- Content -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Remove Medication"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"/>
-
-    <EditText
-        android:id="@+id/etMedicationNameToRemove"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Medication Name to Remove" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnConfirmRemove"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Confirm Removal"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@android:color/holo_red_light"/>
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:titleTextColor="@android:color/white"
+            android:elevation="4dp" />
 
-</LinearLayout>
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove Medication"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Medication Name Input -->
+        <EditText
+            android:id="@+id/etMedicationNameToRemove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Medication Name to Remove"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Confirm Removal Button -->
+        <Button
+            android:id="@+id/btnConfirmRemove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Removal"
+            android:textAllCaps="false"
+            android:backgroundTint="#E53935"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Medication List Label -->
+        <TextView
+            android:id="@+id/listLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saved Medications:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- List Container -->
+        <LinearLayout
+            android:id="@+id/medicationListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to Home"
+            android:backgroundTint="#FF7043"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+    </LinearLayout>
+</ScrollView>
