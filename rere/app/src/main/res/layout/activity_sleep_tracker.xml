@@ -1,94 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF0FF"
-    android:fillViewport="true"
-    tools:context=".SleepTrackerActivity">
+    android:padding="16dp">
 
     <LinearLayout
-        android:id="@+id/rootLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:titleTextColor="@android:color/white"
-            android:elevation="4dp" />
-
-        <!-- Title -->
-        <TextView
+        <!-- Clock and Current Time -->
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sleep Tracker"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_lock_idle_alarm"
+                android:tint="#000000"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="04:25pm"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
         <!-- Sleep Goal -->
         <EditText
-            android:id="@+id/etSleepGoal"
+            android:id="@+id/editTextGoal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Sleep Goal (e.g., 8 hours)"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+            android:hint="Sleep Goal (e.g., 8h)"
+            android:inputType="text"
+            android:padding="8dp"/>
 
         <!-- Bedtime -->
         <EditText
-            android:id="@+id/etBedtime"
+            android:id="@+id/editTextBedTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Bedtime (e.g., 10:00 PM)"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+            android:inputType="text"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"/>
 
         <!-- Wake-up Time -->
         <EditText
-            android:id="@+id/etWakeUpTime"
+            android:id="@+id/editTextWakeUpTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Wake-up Time (e.g., 6:00 AM)"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"/>
+            android:inputType="text"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"/>
 
         <!-- Save Button -->
         <Button
-            android:id="@+id/btnSaveSleep"
+            android:id="@+id/buttonSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Sleep Goals"
-            android:textAllCaps="false"
-            android:backgroundTint="#7E57C2"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp"/>
+            android:text="Save Sleep Log"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#800080"
+            android:textColor="#FFFFFF"/>
 
-        <!-- Sleep Logs Label -->
+        <!-- Sleep Logs Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sleep Logs:"
+            android:text="Sleep Logs"
             android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
 
         <!-- Sleep Logs Container -->
         <LinearLayout
             android:id="@+id/sleepLogContainer"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dp"/>
+            android:padding="8dp"/>
 
         <!-- Back Button -->
         <Button
@@ -96,8 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Back to Home"
-            android:textAllCaps="false"
-            android:backgroundTint="#FF7043"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FFA500"
             android:textColor="#FFFFFF"/>
     </LinearLayout>
 </ScrollView>

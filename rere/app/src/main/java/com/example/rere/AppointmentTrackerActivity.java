@@ -6,18 +6,22 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 
 public class AppointmentTrackerActivity extends AppCompatActivity {
 
     private EditText etClinicName, etAppointmentDate, etAppointmentTime;
     private Button btnSaveAppointment, btnBack;
     private LinearLayout appointmentListContainer;
-
     private List<String> appointments = new ArrayList<>();
 
     @Override
@@ -25,7 +29,7 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_tracker);
 
-        // ✅ Hide the default top ActionBar
+        // Hide ActionBar if present
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -38,33 +42,11 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.buttonBack);
         appointmentListContainer = findViewById(R.id.appointmentListContainer);
 
-        // Add stub appointments
-        addStubAppointments();
-
-        // Load appointments into UI
-        loadAppointments();
-
         // Save button click
         btnSaveAppointment.setOnClickListener(v -> saveAppointment());
 
         // Back button click
         btnBack.setOnClickListener(v -> finish());
-    }
-
-    private void addStubAppointments() {
-        appointments.add("Clinic: City Hospital | Date: 25-12-2025 | Time: 2:00 PM");
-        appointments.add("Clinic: ABC Clinic | Date: 28-12-2025 | Time: 10:30 AM");
-        appointments.add("Clinic: HealthCare Center | Date: 31-12-2025 | Time: 4:00 PM");
-    }
-
-    private void loadAppointments() {
-        appointmentListContainer.removeAllViews();
-        for (String appt : appointments) {
-            TextView tv = new TextView(this);
-            tv.setText(appt);
-            tv.setPadding(8, 8, 8, 8);
-            appointmentListContainer.addView(tv);
-        }
     }
 
     private void saveAppointment() {
@@ -79,15 +61,68 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
 
         String newAppt = "Clinic: " + clinic + " | Date: " + date + " | Time: " + time;
         appointments.add(newAppt);
+        refreshAppointmentList();
 
-        // Refresh UI
-        loadAppointments();
+        Toast.makeText(this, "Appointment Saved!", Toast.LENGTH_SHORT).show();
 
-        // Clear input fields
+        // 🔔 Instant notification
+        NotificationHelper.showNotification(
+                this,
+                "Appointment Added",
+                "Appointment at " + clinic + " on " + date + " at " + time
+        );
+
+        // ⏰ Scheduled reminder
+        scheduleReminder(time, "Appointment at " + clinic + " on " + date + " at " + time);
+
+        // Clear fields
         etClinicName.setText("");
         etAppointmentDate.setText("");
         etAppointmentTime.setText("");
+    }
 
-        Toast.makeText(this, "Appointment saved!", Toast.LENGTH_SHORT).show();
+    private void refreshAppointmentList() {
+        appointmentListContainer.removeAllViews();
+        for (String appt : appointments) {
+            TextView tv = new TextView(this);
+            tv.setText(appt);
+            tv.setPadding(8, 8, 8, 8);
+            appointmentListContainer.addView(tv);
+        }
+    }
+
+    // 🔔 Schedule reminder method
+    private void scheduleReminder(String time, String message) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
+            Date date = sdf.parse(time);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            // If time is earlier than now, schedule for tomorrow
+            if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            Intent intent = new Intent(this, ReminderReceiver.class);
+            intent.putExtra("message", message);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    this, (int) System.currentTimeMillis(), intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            if (alarmManager != null) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+
+            Toast.makeText(this, "Reminder scheduled!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Invalid time format (use hh:mm AM/PM)", Toast.LENGTH_SHORT).show();
+        }
     }
 }

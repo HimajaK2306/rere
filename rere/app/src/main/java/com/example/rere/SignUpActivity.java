@@ -2,7 +2,6 @@ package com.example.rere;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,37 +19,46 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        // Optional: hide ActionBar for a cleaner look
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        // Initialize views
         etFirstName = findViewById(R.id.etFirstName);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvSignInLink = findViewById(R.id.tvSignInLink);
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String firstName = etFirstName.getText().toString();
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+        // Sign Up button click
+        btnSignUp.setOnClickListener(v -> {
+            String firstName = etFirstName.getText().toString().trim();
+            String username = etUsername.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-                if (firstName.isEmpty() || username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
+            if (firstName.isEmpty() || username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            } else {
+                // 🔔 Notification
+                NotificationHelper.showNotification(
+                        this,
+                        "Account Created",
+                        "Welcome, " + firstName + "!"
+                );
 
-        // Navigate to Sign In
-        tvSignInLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                // Navigate to HomePage
+                Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
                 startActivity(intent);
                 finish();
             }
+        });
+
+        // Sign In link click
+        tvSignInLink.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 }

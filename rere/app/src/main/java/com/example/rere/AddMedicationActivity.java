@@ -1,98 +1,147 @@
 package com.example.rere;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.material.card.MaterialCardView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AddMedicationActivity extends AppCompatActivity {
 
-    private EditText editTextName, editTextDosage, editTextFrequency;
+    private EditText editTextName, editTextDosage, editTextFrequency, editTextTime;
+    private Button buttonSave, buttonBack, buttonPickTime;
     private LinearLayout medicationListContainer;
-    private Button buttonSave, buttonBack;
+    private List<String> medicationList = new ArrayList<>();
 
-    private final List<String> medicationList = new ArrayList<>();
+    private Calendar selectedTime; // store chosen time
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_medication);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        // Initialize views
         editTextName = findViewById(R.id.editTextName);
         editTextDosage = findViewById(R.id.editTextDosage);
         editTextFrequency = findViewById(R.id.editTextFrequency);
+        editTextTime = findViewById(R.id.editTextTime);
         buttonSave = findViewById(R.id.buttonSave);
         buttonBack = findViewById(R.id.buttonBack);
+        buttonPickTime = findViewById(R.id.buttonPickTime); // extra button for time picker
         medicationListContainer = findViewById(R.id.medicationListContainer);
 
-        // Stubbed Data (simulate database data)
-        medicationList.addAll(getStubbedMedications());
-        refreshMedicationList();
+        // Save button click
+        buttonSave.setOnClickListener(v -> saveMedication());
 
-        // Save Button Logic
-        buttonSave.setOnClickListener(view -> saveMedication());
+        // Back button click
+        buttonBack.setOnClickListener(v -> finish());
 
-        // Back Button Logic
-        buttonBack.setOnClickListener(view -> {
-            Intent intent = new Intent(AddMedicationActivity.this, HomePageActivity.class);
-            startActivity(intent);
-            finish();
-        });
+        // Time picker button click
+        buttonPickTime.setOnClickListener(v -> showTimePicker());
+    }
+
+    private void showTimePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePicker = new TimePickerDialog(this,
+                (view, selectedHour, selectedMinute) -> {
+                    selectedTime = Calendar.getInstance();
+                    selectedTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                    selectedTime.set(Calendar.MINUTE, selectedMinute);
+                    selectedTime.set(Calendar.SECOND, 0);
+                    selectedTime.set(Calendar.MILLISECOND, 0);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
+                    editTextTime.setText(sdf.format(selectedTime.getTime()));
+                }, hour, minute, false);
+        timePicker.show();
     }
 
     private void saveMedication() {
         String name = editTextName.getText().toString().trim();
         String dosage = editTextDosage.getText().toString().trim();
         String frequency = editTextFrequency.getText().toString().trim();
+        String time = editTextTime.getText().toString().trim();
 
-        if (name.isEmpty() || dosage.isEmpty() || frequency.isEmpty()) {
+        if (name.isEmpty() || dosage.isEmpty() || frequency.isEmpty() || time.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        medicationList.add(name + " - " + dosage + " - " + frequency);
-        Toast.makeText(this, "Medication Saved!", Toast.LENGTH_SHORT).show();
+        // Save to list
+        medicationList.add(name + " - " + dosage + " - " + frequency + " - " + time);
         refreshMedicationList();
+
+        Toast.makeText(this, "Medication Saved!", Toast.LENGTH_SHORT).show();
+
+        // 🔔 Instant notification
+        NotificationHelper.showNotification(
+                this,
+                "Medication Added",
+                name + " (" + dosage + ", " + frequency + ") has been saved."
+        );
+
+        // ⏰ Scheduled reminder
+        if (selectedTime != null) {
+            scheduleReminder(selectedTime, "Time to take " + name + " (" + dosage + ")");
+        }
 
         // Clear fields
         editTextName.setText("");
         editTextDosage.setText("");
         editTextFrequency.setText("");
+        editTextTime.setText("");
     }
 
     private void refreshMedicationList() {
         medicationListContainer.removeAllViews();
-        for (String item : medicationList) {
-            MaterialCardView card = new MaterialCardView(this);
-            card.setCardElevation(4);
-            card.setRadius(16);
-            card.setCardBackgroundColor(getColor(android.R.color.white));
-            card.setUseCompatPadding(true);
-            card.setContentPadding(24, 24, 24, 24);
-
-            TextView text = new TextView(this);
-            text.setText(item);
-            text.setTextSize(16);
-            text.setTextColor(getColor(android.R.color.black));
-
-            card.addView(text);
-            medicationListContainer.addView(card);
+        for (String med : medicationList) {
+            TextView tv = new TextView(this);
+            tv.setText(med);
+            tv.setPadding(8, 8, 8, 8);
+            medicationListContainer.addView(tv);
         }
     }
 
-    // Stubbed Medications
-    private List<String> getStubbedMedications() {
-        List<String> meds = new ArrayList<>();
-        meds.add("Aspirin - 100mg - Once a day");
-        meds.add("Ibuprofen - 200mg - Twice a day");
-        return meds;
+    // 🔔 Schedule reminder method
+    private void scheduleReminder(Calendar calendar, String message) {
+        // If time is earlier than now, schedule for tomorrow
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        Intent intent = new Intent(this, ReminderReceiver.class);
+        intent.putExtra("message", message);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, (int) System.currentTimeMillis(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+
+        Toast.makeText(this, "Reminder scheduled!", Toast.LENGTH_SHORT).show();
     }
 }

@@ -6,18 +6,22 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 
 public class TherapyActivity extends AppCompatActivity {
 
     private EditText etTherapyType, etTherapyTime;
     private Button btnSaveTherapy, btnBack;
     private LinearLayout therapyListContainer;
-
     private List<String> therapySessions = new ArrayList<>();
 
     @Override
@@ -25,29 +29,54 @@ public class TherapyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapy);
 
-        // ✅ Remove the top ActionBar/Toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // Initialize views
         etTherapyType = findViewById(R.id.etTherapyType);
         etTherapyTime = findViewById(R.id.etTherapyTime);
         btnSaveTherapy = findViewById(R.id.btnSaveTherapy);
         btnBack = findViewById(R.id.buttonBack);
         therapyListContainer = findViewById(R.id.therapyListContainer);
 
-        // Add stub therapy sessions
         addStubTherapySessions();
-
-        // Load sessions into UI
         loadTherapySessions();
 
-        // Save button click
         btnSaveTherapy.setOnClickListener(v -> saveTherapySession());
-
-        // Back button click
         btnBack.setOnClickListener(v -> finish());
+    }
+
+    private void scheduleReminder(String time, String message) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
+            Date date = sdf.parse(time);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            Intent intent = new Intent(this, ReminderReceiver.class);
+            intent.putExtra("message", message);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    this, (int) System.currentTimeMillis(), intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            if (alarmManager != null) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+
+            Toast.makeText(this, "Reminder scheduled!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Invalid time format (use hh:mm AM/PM)", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addStubTherapySessions() {
@@ -77,12 +106,21 @@ public class TherapyActivity extends AppCompatActivity {
 
         String session = "Type: " + type + " | Time: " + time;
         therapySessions.add(session);
-
         loadTherapySessions();
 
         etTherapyType.setText("");
         etTherapyTime.setText("");
 
         Toast.makeText(this, "Therapy session saved!", Toast.LENGTH_SHORT).show();
+
+        // 🔔 Notification
+        NotificationHelper.showNotification(
+                this,
+                "Therapy Session Saved",
+                type + " at " + time
+        );
+
+        // ⏰ Schedule reminder
+        scheduleReminder(time, "Therapy Reminder: " + type + " at " + time);
     }
 }
