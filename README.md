@@ -107,3 +107,28 @@ At this stage, the RE&RE app doesn’t use any external APIs to keep sensitive h
 
 ## 	 Requires functionality we will talk about later (maps, media, data base services, etc.) 
 This project will include functionality related to reminders and notifications. Users will be able to set reminders for specific tasks or events, and the system will send notifications at scheduled times. These features involve background services and notification handling, which will be covered in later sessions.
+
+## Team members:
+Vamshi Krishna Balupari(S578138)
+Himaja Kaishetty(S575197)
+Vaishnavi Sidduri(S574385)
+Praneetha Reddy Lakkam(S57492)
+
+## Application information
+## Test credentials   
+user1 / password1
+user2 / password2
+admin / admin123
+## APK
+We have added reminder and notification functionality, but these reminders are created using Android’s built-in Notification and Alarm/WorkManager services, which do not require any external API or internet connection.
+## Supported devices
+Android Virtual Devices (AVD) running Android 9+
+## Sequence information
+User → Login → Home Screen  
+        → Add Medication → DB Save → Notifications  
+        → Remove Medication → DB Update  
+        → Sleep Tracker → DB Save  
+        → Appointment Tracker → DB Save → Notifications  
+        → Therapy Tracker → DB Save → Notifications  
+
+
