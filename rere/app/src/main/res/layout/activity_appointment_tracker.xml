@@ -1,105 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF0FF"
-    android:fillViewport="true"
-    tools:context=".AppointmentTrackerActivity">
+    android:background="#F4FFF8">
 
     <LinearLayout
-        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="22dp">
 
-        <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:titleTextColor="@android:color/white"
-            android:elevation="4dp" />
-
-        <!-- Title -->
         <TextView
+            android:id="@+id/tvAppointmentTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Appointment Tracker"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="#0F3D2E"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-        <!-- Clinic Name -->
-        <EditText
-            android:id="@+id/etClinicName"
+        <LinearLayout
+            android:id="@+id/cardContainerAppointment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Clinic Name"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="vertical"
+            android:background="@drawable/white_green_card"
+            android:padding="20dp"
+            android:layout_marginTop="20dp">
 
-        <!-- Appointment Date -->
-        <EditText
-            android:id="@+id/etAppointmentDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Appointment Date (e.g., 25-12-2025)"
-            android:inputType="date"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add New Appointment"
+                android:textColor="#0F3D2E"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
-        <!-- Appointment Time -->
-        <EditText
-            android:id="@+id/etAppointmentTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Appointment Time (e.g., 2:00 PM)"
-            android:inputType="time"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Schedule a new medical appointment with reminder details."
+                android:textColor="#4F6F63"
+                android:textSize="13sp"
+                android:layout_marginTop="4dp" />
 
-        <!-- Save Button -->
-        <Button
-            android:id="@+id/btnSaveAppointment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Appointment"
-            android:textAllCaps="false"
-            android:backgroundTint="#7E57C2"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clinic Name *"
+                android:textColor="#2E4E43"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp" />
 
-        <!-- Appointment List Label -->
+            <EditText
+                android:id="@+id/etClinicName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:hint="e.g., Apollo Clinic"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A"
+                android:padding="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Appointment Date *"
+                android:textColor="#2E4E43"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/etAppointmentDate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:hint="mm/dd/yyyy"
+                android:focusable="false"
+                android:clickable="true"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Appointment Time *"
+                android:textColor="#2E4E43"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/etAppointmentTime"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:hint="hh:mm AM/PM"
+                android:focusable="false"
+                android:clickable="true"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <Button
+                android:id="@+id/btnSaveAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="22dp"
+                android:text="Add Appointment"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:backgroundTint="#6BAF92" />
+
+            <Button
+                android:id="@+id/buttonClearAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:text="Clear"
+                android:textColor="#6BAF92"
+                android:backgroundTint="#DFF3EA"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tvSavedAppointmentsLabel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Appointments:"
+            android:textColor="#2E4E43"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginTop="22dp" />
 
-        <!-- Appointment List Container -->
         <LinearLayout
             android:id="@+id/appointmentListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginTop="8dp" />
 
-        <!-- Back Button -->
         <Button
             android:id="@+id/buttonBack"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:text="Back to Home"
+            android:textColor="#6BAF92"
             android:textAllCaps="false"
-            android:backgroundTint="#FF7043"
-            android:textColor="#FFFFFF"/>
+            android:backgroundTint="#FFFFFF"
+            android:layout_marginTop="22dp" />
+
     </LinearLayout>
 </ScrollView>

@@ -1,87 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="#F4FFF8"
+    tools:context=".AddMedicationActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="22dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-        <!-- Medication Name -->
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Medication Name"
-            android:inputType="textPersonName"
-            android:padding="8dp"/>
-
-        <!-- Dosage -->
-        <EditText
-            android:id="@+id/editTextDosage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Dosage (e.g. 500mg)"
-            android:inputType="text"
-            android:padding="8dp"/>
-
-        <!-- Frequency -->
-        <EditText
-            android:id="@+id/editTextFrequency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Frequency (e.g. once daily)"
-            android:inputType="text"
-            android:padding="8dp"/>
-
-        <!-- Time Field -->
-        <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Time (hh:mm AM/PM)"
-            android:focusable="false"
-            android:clickable="false"
-            android:padding="8dp"/>
-
-        <!-- Pick Time Button -->
-        <Button
-            android:id="@+id/buttonPickTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pick Time"/>
-
-        <!-- Save Button -->
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Medication"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Back Button -->
-        <Button
-            android:id="@+id/buttonBack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_marginTop="8dp"/>
-
-        <!-- Medication List -->
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tvAddMedTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Saved Medications:"
+            android:text="Add Medication"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
+            android:textColor="#0F3D2E"
+            android:letterSpacing="0.02"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <LinearLayout
-            android:id="@+id/medicationListContainer"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:id="@+id/cardContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"/>
-    </LinearLayout>
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/white_green_card"
+            app:layout_constraintTop_toBottomOf="@id/tvAddMedTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medication Details"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#0F3D2E" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter the medication information including dosage and schedule."
+                android:textSize="13sp"
+                android:textColor="#4F6F63"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medication Name *"
+                android:layout_marginTop="18dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:hint="e.g., Aspirin, Vitamin D"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dosage *"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <EditText
+                android:id="@+id/editTextDosage"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:hint="e.g., 500mg, 2 tablets"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date *"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <EditText
+                android:id="@+id/editTextStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:focusable="false"
+                android:clickable="true"
+                android:hint="mm/dd/yyyy"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Date (Optional)"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <EditText
+                android:id="@+id/editTextEndDate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:focusable="false"
+                android:clickable="true"
+                android:hint="mm/dd/yyyy"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reminder Time *"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/editTextTime"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/white_green_input"
+                    android:hint="hh:mm AM/PM"
+                    android:padding="14dp"
+                    android:textColor="#0F3D2E"
+                    android:textColorHint="#88A79A"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+                <Button
+                    android:id="@+id/buttonPickTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:paddingLeft="22dp"
+                    android:paddingRight="22dp"
+                    android:text="Pick Time"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#6BAF92" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notes (Optional)"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <EditText
+                android:id="@+id/editTextNotes"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@drawable/white_green_input"
+                android:gravity="top|start"
+                android:hint="Additional instructions, side effects to watch for, etc."
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A"
+                android:inputType="textMultiLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="22dp">
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Add Medication"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#6BAF92" />
+
+                <Button
+                    android:id="@+id/buttonCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:text="Clear"
+                    android:textColor="#6BAF92"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#DFF3EA" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="#6BAF92"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/cardContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

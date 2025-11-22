@@ -1,83 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF0FF"
-    android:fillViewport="true"
-    tools:context=".RemoveMedicationActivity">
+    android:background="#F4FFF8">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="22dp">
 
-        <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:titleTextColor="@android:color/white"
-            android:elevation="4dp" />
-
-        <!-- Title -->
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tvRemoveTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Remove Medication"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="#0F3D2E" />
 
-        <!-- Medication Name Input -->
-        <EditText
-            android:id="@+id/etMedicationNameToRemove"
+        <LinearLayout
+            android:id="@+id/cardContainerRemove"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Medication Name to Remove"
-            android:background="@android:drawable/edit_text"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"/>
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/white_green_card">
 
-        <!-- Confirm Removal Button -->
-        <Button
-            android:id="@+id/btnConfirmRemove"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirm Removal"
-            android:textAllCaps="false"
-            android:backgroundTint="#E53935"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Find Medication"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#0F3D2E" />
 
-        <!-- Medication List Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type the medication name to remove, or use the Remove buttons below."
+                android:textSize="13sp"
+                android:textColor="#4F6F63"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medication Name"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:textColor="#2E4E43" />
+
+            <EditText
+                android:id="@+id/editTextRemoveName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/white_green_input"
+                android:hint="Enter Medication Name to Remove"
+                android:padding="14dp"
+                android:textColor="#0F3D2E"
+                android:textColorHint="#88A79A" />
+
+            <Button
+                android:id="@+id/buttonConfirmRemoval"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="18dp"
+                android:text="Confirm Removal"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#6BAF92" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/listLabel"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvSavedLabel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Saved Medications:"
             android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
+            android:textSize="16sp"
+            android:textColor="#2E4E43"
+            android:layout_marginTop="22dp" />
 
-        <!-- List Container -->
         <LinearLayout
             android:id="@+id/medicationListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:layout_marginTop="8dp" />
 
-        <!-- Back Button -->
         <Button
-            android:id="@+id/buttonBack"
+            android:id="@+id/buttonBackHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:text="Back to Home"
-            android:backgroundTint="#FF7043"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:textAllCaps="false"
+            android:textColor="#6BAF92"
+            android:backgroundTint="#FFFFFF"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="8dp" />
     </LinearLayout>
 </ScrollView>
+ 

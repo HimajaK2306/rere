@@ -1,85 +1,136 @@
 package com.example.rere;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RemoveMedicationActivity extends AppCompatActivity {
 
-    private EditText etMedicationNameToRemove;
-    private Button btnConfirmRemove, buttonBack;
+    private EditText editTextRemoveName;
+    private Button buttonConfirmRemoval, buttonBackHome;
     private LinearLayout medicationListContainer;
+    private final List<String> medicationList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remove_medication);
 
-        // Optional: hide the ActionBar for a cleaner look
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // Initialize views
-        etMedicationNameToRemove = findViewById(R.id.etMedicationNameToRemove);
-        btnConfirmRemove = findViewById(R.id.btnConfirmRemove);
-        buttonBack = findViewById(R.id.buttonBack);
+        editTextRemoveName = findViewById(R.id.editTextRemoveName);
+        buttonConfirmRemoval = findViewById(R.id.buttonConfirmRemoval);
+        buttonBackHome = findViewById(R.id.buttonBackHome);
         medicationListContainer = findViewById(R.id.medicationListContainer);
 
-        // Add some sample medications to the list
-        addStubMedications();
-
-        // Set button listeners
-        btnConfirmRemove.setOnClickListener(v -> removeMedication());
-        buttonBack.setOnClickListener(v -> finish());
-    }
-
-    private void addStubMedications() {
-        String[] stubs = {
-                "Paracetamol - 500mg - Twice a day",
-                "Ibuprofen - 200mg - Once a day",
-                "Vitamin C - 1000mg - Once a day"
-        };
-
-        for (String med : stubs) {
-            TextView medView = new TextView(this);
-            medView.setText(med);
-            medView.setPadding(8, 8, 8, 8);
-            medicationListContainer.addView(medView);
+        if (buttonConfirmRemoval != null) {
+            buttonConfirmRemoval.setOnClickListener(v -> removeByName());
+        }
+        if (buttonBackHome != null) {
+            buttonBackHome.setOnClickListener(v -> finish());
         }
     }
 
-    private void removeMedication() {
-        String medName = etMedicationNameToRemove.getText().toString().trim();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        medicationList.clear();
+        medicationList.addAll(MedicationStorage.getMedications(this));
+        refreshMedicationList();
+    }
 
-        if (medName.isEmpty()) {
-            Toast.makeText(this, "Please enter a medication name", Toast.LENGTH_SHORT).show();
+    private void removeByName() {
+        if (editTextRemoveName == null) return;
+
+        String name = editTextRemoveName.getText().toString().trim();
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(this, "Enter a medication name", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        boolean removed = false;
-        int childCount = medicationListContainer.getChildCount();
+        String lower = name.toLowerCase();
+        String target = null;
 
-        for (int i = 0; i < childCount; i++) {
-            TextView child = (TextView) medicationListContainer.getChildAt(i);
-            if (child.getText().toString().toLowerCase().contains(medName.toLowerCase())) {
-                medicationListContainer.removeView(child);
-                removed = true;
+        for (String m : medicationList) {
+            if (m.toLowerCase().startsWith(lower)) {
+                target = m;
                 break;
             }
         }
 
-        if (removed) {
-            Toast.makeText(this, medName + " removed!", Toast.LENGTH_SHORT).show();
-            NotificationHelper.showNotification(this, "Medication Removed", medName + " has been removed.");
-        } else {
+        if (target == null) {
             Toast.makeText(this, "Medication not found", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        etMedicationNameToRemove.setText("");
+        medicationList.remove(target);
+        MedicationStorage.saveMedications(this, medicationList);
+        refreshMedicationList();
+
+        editTextRemoveName.setText("");
+        Toast.makeText(this, "Medication removed", Toast.LENGTH_SHORT).show();
+    }
+
+    private void refreshMedicationList() {
+        if (medicationListContainer == null) return;
+
+        medicationListContainer.removeAllViews();
+
+        for (String med : medicationList) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(8, 8, 8, 8);
+
+            TextView tv = new TextView(this);
+            LinearLayout.LayoutParams tvParams =
+                    new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            tv.setLayoutParams(tvParams);
+            tv.setText(med);
+            tv.setTextColor(0xFF0F3D2E);
+
+            Button btnRemove = new Button(this);
+            LinearLayout.LayoutParams btnParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+            btnRemove.setLayoutParams(btnParams);
+            btnRemove.setText("Remove");
+            btnRemove.setAllCaps(false);
+            btnRemove.setTextColor(0xFFFFFFFF);
+            btnRemove.setBackgroundColor(Color.parseColor("#FF6B6B"));
+
+            String entry = med;
+            btnRemove.setOnClickListener(v -> {
+                medicationList.remove(entry);
+                MedicationStorage.saveMedications(this, medicationList);
+                refreshMedicationList();
+                Toast.makeText(this, "Medication removed", Toast.LENGTH_SHORT).show();
+            });
+
+            row.addView(tv);
+            row.addView(btnRemove);
+            medicationListContainer.addView(row);
+        }
+
+        if (medicationList.isEmpty()) {
+            TextView empty = new TextView(this);
+            empty.setText("No medications saved.");
+            empty.setTextColor(0xFF88A79A);
+            empty.setPadding(8, 8, 8, 8);
+            medicationListContainer.addView(empty);
+        }
     }
 }
