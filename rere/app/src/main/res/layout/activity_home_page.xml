@@ -9,107 +9,314 @@
     android:padding="24dp"
     tools:context=".HomePageActivity">
 
-    <!-- Title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Remind and Recover"
-        android:textSize="22sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="#222222"
+        android:textColor="#000000"
         android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Button Container (Keeps all buttons centered and fixed) -->
     <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintBottom_toTopOf="@id/overviewCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="28dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginEnd="12dp">
+
+                <ImageButton
+                    android:id="@+id/btnAddMed"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/rr_pic1"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Medication"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginStart="12dp">
+
+                <ImageButton
+                    android:id="@+id/btnRemoveMed"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/rr_pic1"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remove Medication"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="28dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginEnd="12dp">
+
+                <ImageButton
+                    android:id="@+id/btnSleepTracker"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/rr_pic2"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sleep Tracker"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginStart="12dp">
+
+                <ImageButton
+                    android:id="@+id/btnAppointmentTracker"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/rr_pic5"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Appointment Tracker"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/btnTherapy"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/rr_pic4"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Therapy"
+                    android:textSize="16sp"
+                    android:textColor="#111111"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/overviewCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_overview_card"
+        android:padding="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- First Row -->
+        <TextView
+            android:id="@+id/tvOverviewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quick Overview"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000000" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="12dp">
+            android:layout_marginTop="12dp">
 
-            <Button
-                android:id="@+id/btnAddMed"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add Medication"
-                android:backgroundTint="#667770"
-                android:textColor="#FFFFFF"
-                android:elevation="5dp"
-                android:layout_marginEnd="8dp" />
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnRemoveMed"
+                <TextView
+                    android:id="@+id/tvActiveMedCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active Medications"
+                    android:textSize="12sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Remove Medication"
-                android:backgroundTint="#667770"
-                android:textColor="#FFFFFF"
-                android:elevation="5dp"
-                android:layout_marginStart="8dp" />
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSleepCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#0057FF" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sleep Records"
+                    android:textSize="12sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
         </LinearLayout>
 
-        <!-- Second Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="12dp">
+            android:layout_marginTop="8dp">
 
-            <Button
-                android:id="@+id/btnSleepTracker"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sleep Tracker"
-                android:backgroundTint="#889B8A"
-                android:textColor="#FFFFFF"
-                android:elevation="5dp"
-                android:layout_marginEnd="8dp" />
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnAppointmentTracker"
+                <TextView
+                    android:id="@+id/tvAppointmentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#7B1FA2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upcoming Appointments"
+                    android:textSize="12sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Appointment Tracker"
-                android:backgroundTint="#889B8A"
-                android:textColor="#FFFFFF"
-                android:elevation="5dp"
-                android:layout_marginStart="8dp" />
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTherapyCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF6A00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Therapy Sessions"
+                    android:textSize="12sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
         </LinearLayout>
-
-        <!-- Centered Last Button -->
-        <Button
-            android:id="@+id/btnTherapy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Therapy"
-            android:backgroundTint="#667770"
-            android:textColor="#FFFFFF"
-            android:elevation="5dp"
-            android:layout_marginTop="12dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
