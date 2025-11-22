@@ -1,5 +1,8 @@
 package com.example.rere;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,17 +14,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class SleepTrackerActivity extends AppCompatActivity {
 
-    private EditText editTextGoal, editTextBedTime, editTextWakeUpTime;
-    private Button buttonSave, buttonBack;
+    private EditText editTextBedTime, editTextMessage;
+    private Button buttonPickTime, buttonSave, buttonBack;
     private TextView textCurrentTime;
     private LinearLayout sleepLogContainer;
     private final List<String> sleepLogs = new ArrayList<>();
+    private Calendar selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,51 +38,100 @@ public class SleepTrackerActivity extends AppCompatActivity {
         }
 
         textCurrentTime = findViewById(R.id.textCurrentTime);
-        editTextGoal = findViewById(R.id.editTextGoal);
         editTextBedTime = findViewById(R.id.editTextBedTime);
-        editTextWakeUpTime = findViewById(R.id.editTextWakeUpTime);
+        editTextMessage = findViewById(R.id.editTextMessage);
+        buttonPickTime = findViewById(R.id.buttonPickTime);
         buttonSave = findViewById(R.id.buttonSave);
         buttonBack = findViewById(R.id.buttonBack);
         sleepLogContainer = findViewById(R.id.sleepLogContainer);
 
-        // Show current time
         String currentTime = new SimpleDateFormat("hh:mma", Locale.US).format(new Date());
         textCurrentTime.setText(currentTime);
 
-        // 🔹 Seed sample logs (hard-coded)
-        sleepLogs.add("Goal: 8h | Bedtime: 10:00 PM | Wake-up: 6:00 AM");
-        sleepLogs.add("Goal: 7h | Bedtime: 11:00 PM | Wake-up: 6:00 AM");
-        sleepLogs.add("Goal: 6h | Bedtime: 12:00 AM | Wake-up: 6:00 AM");
-        sleepLogs.add("Goal: 2 hr | Bedtime: 04:29pm | Wake-up: 04:30pm");
-
+        sleepLogs.add("Bedtime: 10:00 PM | Message: Time to sleep | Logged at: 09:30 PM");
+        sleepLogs.add("Bedtime: 11:00 PM | Message: Get ready for bed | Logged at: 10:30 PM");
         refreshSleepLogs();
 
+        buttonPickTime.setOnClickListener(v -> showTimePicker());
         buttonSave.setOnClickListener(v -> saveSleepLog());
         buttonBack.setOnClickListener(v -> finish());
     }
 
+    private void showTimePicker() {
+        Calendar now = Calendar.getInstance();
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+
+        android.app.TimePickerDialog dialog = new android.app.TimePickerDialog(
+                this,
+                (view, selectedHour, selectedMinute) -> {
+                    selectedTime = Calendar.getInstance();
+                    selectedTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                    selectedTime.set(Calendar.MINUTE, selectedMinute);
+                    selectedTime.set(Calendar.SECOND, 0);
+                    selectedTime.set(Calendar.MILLISECOND, 0);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
+                    editTextBedTime.setText(sdf.format(selectedTime.getTime()));
+                },
+                hour,
+                minute,
+                false
+        );
+        dialog.show();
+    }
 
     private void saveSleepLog() {
-        String goal = editTextGoal.getText().toString().trim();
-        String bedTime = editTextBedTime.getText().toString().trim();
-        String wakeUpTime = editTextWakeUpTime.getText().toString().trim();
+        String message = editTextMessage.getText().toString().trim();
 
-        if (goal.isEmpty() || bedTime.isEmpty() || wakeUpTime.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        if (selectedTime == null || message.isEmpty()) {
+            Toast.makeText(this, "Select bedtime and enter a message", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String log = "Goal: " + goal + " | Bedtime: " + bedTime + " | Wake-up: " + wakeUpTime;
+        OverviewStatsManager.incrementSleepRecords(this);
+
+        String bedtimeStr = new SimpleDateFormat("hh:mm a", Locale.US).format(selectedTime.getTime());
+        String loggedAtStr = new SimpleDateFormat("hh:mm a", Locale.US).format(new Date());
+
+        String log = "Bedtime: " + bedtimeStr + " | Message: " + message + " | Logged at: " + loggedAtStr;
         sleepLogs.add(log);
         refreshSleepLogs();
 
-        NotificationHelper.showNotification(this, "Sleep Log Saved", log);
-        Toast.makeText(this, "Sleep log saved!", Toast.LENGTH_SHORT).show();
+        NotificationHelper.showNotification(
+                this,
+                "Sleep Reminder Set",
+                "At " + bedtimeStr + ": " + message
+        );
 
-        // Clear fields after save
-        editTextGoal.setText("");
+        scheduleReminder(selectedTime, "Sleep Reminder: " + message);
+
+        Toast.makeText(this, "Sleep reminder saved", Toast.LENGTH_SHORT).show();
+
         editTextBedTime.setText("");
-        editTextWakeUpTime.setText("");
+        editTextMessage.setText("");
+        selectedTime = null;
+    }
+
+    private void scheduleReminder(Calendar calendar, String message) {
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        Intent intent = new Intent(this, ReminderReceiver.class);
+        intent.putExtra("message", message);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                (int) System.currentTimeMillis(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
     }
 
     private void refreshSleepLogs() {
