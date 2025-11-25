@@ -1,11 +1,13 @@
 package com.example.rere;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -19,45 +21,55 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // Optional: hide ActionBar for a cleaner look
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // Initialize views
         etFirstName = findViewById(R.id.etFirstName);
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        btnSignUp = findViewById(R.id.btnSignUp);
+        etUsername  = findViewById(R.id.etUsername);
+        etPassword  = findViewById(R.id.etPassword);
+        btnSignUp   = findViewById(R.id.btnSignUp);
         tvSignInLink = findViewById(R.id.tvSignInLink);
 
-        // Sign Up button click
         btnSignUp.setOnClickListener(v -> {
-            String firstName = etFirstName.getText().toString().trim();
-            String username = etUsername.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String first = etFirstName.getText().toString().trim();
+            String user  = etUsername.getText().toString().trim();
+            String pass  = etPassword.getText().toString().trim();
 
-            if (firstName.isEmpty() || username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            } else {
-                // 🔔 Notification
-                NotificationHelper.showNotification(
-                        this,
-                        "Account Created",
-                        "Welcome, " + firstName + "!"
-                );
-
-                // Navigate to HomePage
-                Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
-                startActivity(intent);
-                finish();
+            if (first.isEmpty() || user.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // save this user in SharedPreferences
+            SharedPreferences users = getSharedPreferences("users", MODE_PRIVATE);
+
+            // optional: avoid overwriting an existing user
+            if (users.contains(user + "_user")) {
+                Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            users.edit()
+                    .putString(user + "_user", user)
+                    .putString(user + "_pass", pass)
+                    .apply();
+
+            // set this user as the current session
+            getSharedPreferences("session", MODE_PRIVATE)
+                    .edit()
+                    .putString("active_user", user)
+                    .apply();
+
+            Toast.makeText(this, "Account created for " + first, Toast.LENGTH_SHORT).show();
+
+            // go to login screen
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
         });
 
-        // Sign In link click
         tvSignInLink.setOnClickListener(v -> {
-            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, SignInActivity.class));
             finish();
         });
     }
