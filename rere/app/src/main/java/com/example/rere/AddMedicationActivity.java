@@ -8,16 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 public class AddMedicationActivity extends AppCompatActivity {
@@ -34,12 +30,9 @@ public class AddMedicationActivity extends AppCompatActivity {
     private Button buttonBack;
     private Button buttonPickTime;
 
-    private LinearLayout medicationListContainer;
-
-    private final List<String> medicationList = new ArrayList<>();
-    private Calendar selectedTime;   // for reminder scheduling
-    private Calendar selectedStart;  // optional date usage
-    private Calendar selectedEnd;    // optional date usage
+    private Calendar selectedTime;
+    private Calendar selectedStart;
+    private Calendar selectedEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,43 +55,13 @@ public class AddMedicationActivity extends AppCompatActivity {
         buttonBack = findViewById(R.id.buttonBack);
         buttonPickTime = findViewById(R.id.buttonPickTime);
 
-        medicationListContainer = findViewById(R.id.medicationListContainer);
+        buttonPickTime.setOnClickListener(v -> showTimePicker());
+        editTextStartDate.setOnClickListener(v -> showDatePicker(true));
+        editTextEndDate.setOnClickListener(v -> showDatePicker(false));
 
-        medicationList.clear();
-        medicationList.addAll(MedicationStorage.getMedications(this));
-        refreshMedicationList();
-
-        if (buttonSave != null) {
-            buttonSave.setOnClickListener(v -> saveMedication());
-        }
-
-        if (buttonCancel != null) {
-            buttonCancel.setOnClickListener(v -> clearFields());
-        }
-
-        if (buttonBack != null) {
-            buttonBack.setOnClickListener(v -> finish());
-        }
-
-        if (buttonPickTime != null) {
-            buttonPickTime.setOnClickListener(v -> showTimePicker());
-        }
-
-        if (editTextStartDate != null) {
-            editTextStartDate.setOnClickListener(v -> showDatePicker(true));
-        }
-
-        if (editTextEndDate != null) {
-            editTextEndDate.setOnClickListener(v -> showDatePicker(false));
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        medicationList.clear();
-        medicationList.addAll(MedicationStorage.getMedications(this));
-        refreshMedicationList();
+        buttonSave.setOnClickListener(v -> saveMedication());
+        buttonCancel.setOnClickListener(v -> clearFields());
+        buttonBack.setOnClickListener(v -> finish());
     }
 
     private void showTimePicker() {
@@ -189,11 +152,8 @@ public class AddMedicationActivity extends AppCompatActivity {
 
         String entry = entryBuilder.toString();
 
-        medicationList.add(entry);
-        MedicationStorage.saveMedications(this, medicationList);
-        refreshMedicationList();
-
-        OverviewStatsManager.incrementActiveMedications(this);
+        // Persist single source of truth
+        MedicationStorage.addMedication(this, entry);
 
         NotificationHelper.showNotification(
                 this,
@@ -210,38 +170,16 @@ public class AddMedicationActivity extends AppCompatActivity {
     }
 
     private void clearFields() {
-        if (editTextName != null) editTextName.setText("");
-        if (editTextDosage != null) editTextDosage.setText("");
-        if (editTextStartDate != null) editTextStartDate.setText("");
-        if (editTextEndDate != null) editTextEndDate.setText("");
-        if (editTextTime != null) editTextTime.setText("");
-        if (editTextNotes != null) editTextNotes.setText("");
+        editTextName.setText("");
+        editTextDosage.setText("");
+        editTextStartDate.setText("");
+        editTextEndDate.setText("");
+        editTextTime.setText("");
+        editTextNotes.setText("");
 
         selectedTime = null;
         selectedStart = null;
         selectedEnd = null;
-    }
-
-    private void refreshMedicationList() {
-        if (medicationListContainer == null) return;
-
-        medicationListContainer.removeAllViews();
-
-        for (String med : medicationList) {
-            TextView tv = new TextView(this);
-            tv.setText(med);
-            tv.setPadding(8, 8, 8, 8);
-            tv.setTextColor(0xFF0F3D2E);
-            medicationListContainer.addView(tv);
-        }
-
-        if (medicationList.isEmpty()) {
-            TextView empty = new TextView(this);
-            empty.setText("No medications saved yet.");
-            empty.setPadding(8, 8, 8, 8);
-            empty.setTextColor(0xFF88A79A);
-            medicationListContainer.addView(empty);
-        }
     }
 
     private void scheduleReminder(Calendar calendar, String message) {
@@ -260,9 +198,13 @@ public class AddMedicationActivity extends AppCompatActivity {
         );
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        }
+        AlarmUtils.scheduleExactAlarm(
+                alarmManager,
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent
+        );
+
     }
 
     private String safeText(EditText et) {
@@ -271,3 +213,4 @@ public class AddMedicationActivity extends AppCompatActivity {
         return cs == null ? "" : cs.toString().trim();
     }
 }
+ 

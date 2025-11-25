@@ -9,26 +9,27 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Central storage for medications.
+ * All activities must use only this class to read/write medications.
+ */
 public class MedicationStorage {
 
-    private static final String PREF_NAME = "medication_store";
-    private static final String KEY_LIST = "medications";
+    private static final String PREFS_NAME = "medication_prefs";
+    private static final String KEY_MED_LIST = "med_list";
 
-    private static SharedPreferences getPrefs(Context context) {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
+    // Read all medications as a List<String>
     public static List<String> getMedications(Context context) {
-        SharedPreferences prefs = getPrefs(context);
-        String json = prefs.getString(KEY_LIST, null);
+        SharedPreferences prefs =
+                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        String json = prefs.getString(KEY_MED_LIST, "[]");
+
         List<String> result = new ArrayList<>();
-        if (json == null || json.isEmpty()) {
-            return result;
-        }
         try {
-            JSONArray arr = new JSONArray(json);
-            for (int i = 0; i < arr.length(); i++) {
-                result.add(arr.getString(i));
+            JSONArray array = new JSONArray(json);
+            for (int i = 0; i < array.length(); i++) {
+                result.add(array.getString(i));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -36,24 +37,32 @@ public class MedicationStorage {
         return result;
     }
 
+    // Overwrite stored list
     public static void saveMedications(Context context, List<String> medications) {
-        JSONArray arr = new JSONArray();
-        for (String m : medications) {
-            arr.put(m);
+        JSONArray array = new JSONArray();
+        for (String med : medications) {
+            array.put(med);
         }
-        getPrefs(context).edit().putString(KEY_LIST, arr.toString()).apply();
+
+        SharedPreferences prefs =
+                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        prefs.edit()
+                .putString(KEY_MED_LIST, array.toString())
+                .apply();
     }
 
-    public static void addMedication(Context context, String medication) {
-        List<String> list = getMedications(context);
-        list.add(medication);
-        saveMedications(context, list);
+    // Append single entry
+    public static void addMedication(Context context, String entry) {
+        List<String> meds = getMedications(context);
+        meds.add(entry);
+        saveMedications(context, meds);
     }
 
-    public static void removeMedication(Context context, String medication) {
-        List<String> list = getMedications(context);
-        if (list.remove(medication)) {
-            saveMedications(context, list);
-        }
+    // Optional helper to clear everything
+    public static void clearAll(Context context) {
+        SharedPreferences prefs =
+                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().remove(KEY_MED_LIST).apply();
     }
 }
