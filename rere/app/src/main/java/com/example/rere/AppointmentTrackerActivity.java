@@ -1,3 +1,5 @@
+// File: app/src/main/java/com/example/rere/AppointmentTrackerActivity.java
+
 package com.example.rere;
 
 import android.app.AlarmManager;
@@ -17,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -81,6 +82,8 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
                     selectedTime = Calendar.getInstance();
                     selectedTime.set(Calendar.HOUR_OF_DAY, h);
                     selectedTime.set(Calendar.MINUTE, m);
+                    selectedTime.set(Calendar.SECOND, 0);
+                    selectedTime.set(Calendar.MILLISECOND, 0);
 
                     SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
                     etAppointmentTime.setText(sdf.format(selectedTime.getTime()));
@@ -96,6 +99,7 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
         etClinicName.setText("");
         etAppointmentDate.setText("");
         etAppointmentTime.setText("");
+        selectedTime = null;
     }
 
     private void saveAppointment() {
@@ -108,7 +112,13 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
             return;
         }
 
-        OverviewStatsManager.incrementUpcomingAppointments(this);
+        if (selectedTime == null) {
+            Toast.makeText(this, "Pick a time again", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // unified counter
+        OverviewStatsManager.increment(this, "appointments");
 
         String newAppt = "Clinic: " + clinic + " | Date: " + date + " | Time: " + time;
         appointments.add(newAppt);
@@ -120,7 +130,9 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
                 "Appointment at " + clinic + " on " + date + " at " + time
         );
 
+        // ✅ Use selectedTime with today's date, adjust into future
         scheduleReminder(time, newAppt);
+
         clearFields();
     }
 
@@ -135,27 +147,36 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
         }
     }
 
+    // ✅ FIXED: use selectedTime instead of parsing "1970" date
     private void scheduleReminder(String time, String message) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
-            Date date = sdf.parse(time);
+        if (selectedTime == null) return;
 
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
+        Calendar c = (Calendar) selectedTime.clone();
 
-            Intent intent = new Intent(this, ReminderReceiver.class);
-            intent.putExtra("message", message);
+        // Make sure the reminder is in the future
+        if (c.getTimeInMillis() < System.currentTimeMillis()) {
+            c.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    this,
-                    (int) System.currentTimeMillis(),
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
+        Intent intent = new Intent(this, ReminderReceiver.class);
+        intent.putExtra("message", message);
 
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                (int) System.currentTimeMillis(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
-        } catch (Exception ignored) { }
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        // ✅ Use safe exact alarm wrapper
+        AlarmUtils.scheduleExactAlarm(
+                alarmManager,
+                AlarmManager.RTC_WAKEUP,
+                c.getTimeInMillis(),
+                pendingIntent
+        );
     }
+
 }

@@ -1,14 +1,23 @@
+// File: app/src/main/java/com/example/rere/HomePageActivity.java
+
 package com.example.rere;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
-public class HomePageActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.List;
+
+public class HomePageActivity extends AppCompatActivity {
+
+    private static final int REQ_NOTIF_PERMISSION = 1001;
 
     private ImageButton btnAddMed, btnRemoveMed, btnSleepTracker, btnAppointmentTracker, btnTherapy;
     private TextView tvActiveMedCount, tvSleepCount, tvAppointmentCount, tvTherapyCount;
@@ -22,25 +31,52 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().hide();
         }
 
+        // ✅ Ask for notification permission on Android 13+
+        requestNotificationPermissionIfNeeded();
+
         btnAddMed = findViewById(R.id.btnAddMed);
         btnRemoveMed = findViewById(R.id.btnRemoveMed);
         btnSleepTracker = findViewById(R.id.btnSleepTracker);
         btnAppointmentTracker = findViewById(R.id.btnAppointmentTracker);
         btnTherapy = findViewById(R.id.btnTherapy);
 
-
         tvActiveMedCount = findViewById(R.id.tvActiveMedCount);
         tvSleepCount = findViewById(R.id.tvSleepCount);
         tvAppointmentCount = findViewById(R.id.tvAppointmentCount);
         tvTherapyCount = findViewById(R.id.tvTherapyCount);
 
-        btnAddMed.setOnClickListener(this);
-        btnRemoveMed.setOnClickListener(this);
-        btnSleepTracker.setOnClickListener(this);
-        btnAppointmentTracker.setOnClickListener(this);
-        btnTherapy.setOnClickListener(this);
+        btnAddMed.setOnClickListener(v ->
+                startActivity(new Intent(this, AddMedicationActivity.class)));
+
+        btnRemoveMed.setOnClickListener(v ->
+                startActivity(new Intent(this, RemoveMedicationActivity.class)));
+
+        btnSleepTracker.setOnClickListener(v ->
+                startActivity(new Intent(this, SleepTrackerActivity.class)));
+
+        btnAppointmentTracker.setOnClickListener(v ->
+                startActivity(new Intent(this, AppointmentTrackerActivity.class)));
+
+        btnTherapy.setOnClickListener(v ->
+                startActivity(new Intent(this, TherapyActivity.class)));
 
         updateOverviewCounts();
+    }
+
+    private void requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        REQ_NOTIF_PERMISSION
+                );
+            }
+        }
     }
 
     @Override
@@ -50,39 +86,19 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void updateOverviewCounts() {
-        if (tvActiveMedCount == null) {
-            tvActiveMedCount = findViewById(R.id.tvActiveMedCount);
-            tvSleepCount = findViewById(R.id.tvSleepCount);
-            tvAppointmentCount = findViewById(R.id.tvAppointmentCount);
-            tvTherapyCount = findViewById(R.id.tvTherapyCount);
-        }
+        // Medication count = size of stored list
+        List<String> meds = MedicationStorage.getMedications(this);
+        int activeMeds = meds.size();
+        tvActiveMedCount.setText(String.valueOf(activeMeds));
 
-        tvActiveMedCount.setText(String.valueOf(OverviewStatsManager.getActiveMedications(this)));
-        tvSleepCount.setText(String.valueOf(OverviewStatsManager.getSleepRecords(this)));
-        tvAppointmentCount.setText(String.valueOf(OverviewStatsManager.getUpcomingAppointments(this)));
-        tvTherapyCount.setText(String.valueOf(OverviewStatsManager.getTherapySessions(this)));
-    }
+        // Other stats
+        int sleep = OverviewStatsManager.get(this, "sleep");
+        tvSleepCount.setText(String.valueOf(sleep));
 
+        int appointments = OverviewStatsManager.get(this, "appointments");
+        tvAppointmentCount.setText(String.valueOf(appointments));
 
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        int id = v.getId();
-
-        if (id == R.id.btnAddMed) {
-            intent = new Intent(this, AddMedicationActivity.class);
-        } else if (id == R.id.btnRemoveMed) {
-            intent = new Intent(this, RemoveMedicationActivity.class);
-        } else if (id == R.id.btnSleepTracker) {
-            intent = new Intent(this, SleepTrackerActivity.class);
-        } else if (id == R.id.btnAppointmentTracker) {
-            intent = new Intent(this, AppointmentTrackerActivity.class);
-        } else if (id == R.id.btnTherapy) {
-            intent = new Intent(this, TherapyActivity.class);
-        } else {
-            return;
-        }
-
-        startActivity(intent);
+        int therapy = OverviewStatsManager.get(this, "therapy");
+        tvTherapyCount.setText(String.valueOf(therapy));
     }
 }

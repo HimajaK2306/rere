@@ -89,7 +89,8 @@ public class SleepTrackerActivity extends AppCompatActivity {
             return;
         }
 
-        OverviewStatsManager.incrementSleepRecords(this);
+        // FIXED — unified counter system
+        OverviewStatsManager.increment(this, "sleep");
 
         String bedtimeStr = new SimpleDateFormat("hh:mm a", Locale.US).format(selectedTime.getTime());
         String loggedAtStr = new SimpleDateFormat("hh:mm a", Locale.US).format(new Date());
@@ -129,9 +130,13 @@ public class SleepTrackerActivity extends AppCompatActivity {
         );
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        }
+        AlarmUtils.scheduleExactAlarm(
+                alarmManager,
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent
+        );
+
     }
 
     private void refreshSleepLogs() {

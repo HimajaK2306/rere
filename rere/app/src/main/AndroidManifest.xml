@@ -1,19 +1,45 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="com.example.rere">
-    <!--  Required for notifications on Android 13+  -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:roundIcon="@drawable/ic_launcher" android:supportsRtl="true" android:theme="@style/Theme.Rere">
-        <activity android:name=".AddMedicationActivity"/>
-        <activity android:name=".RemoveMedicationActivity"/>
-        <activity android:name=".SleepTrackerActivity"/>
-        <activity android:name=".AppointmentTrackerActivity"/>
-        <activity android:name=".TherapyActivity"/>
-        <activity android:name=".HomePageActivity"/>
-        <activity android:name=".SignUpActivity" android:exported="true">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.rere">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <receiver
+            android:name=".ReminderReceiver"
+            android:exported="false" />
+        <!-- Launcher activity -->
+        <activity
+            android:name=".SignInActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".ReminderReceiver" android:exported="true"/>
+
+        <!-- Other activities (no intent-filters, so exported can stay default=false) -->
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".HomePageActivity" />
+        <activity android:name=".AddMedicationActivity" />
+        <activity android:name=".RemoveMedicationActivity" />
+        <activity android:name=".SleepTrackerActivity" />
+        <activity android:name=".AppointmentTrackerActivity" />
+        <activity android:name=".TherapyActivity" />
+
+        <!-- BroadcastReceiver for alarms -->
+        <receiver
+            android:name=".ReminderReceiver"
+            android:exported="false" />
     </application>
+
 </manifest>
