@@ -31,7 +31,6 @@
         android:hint="Password"
         android:inputType="textPassword" />
 
-    <!-- 👇 Important: This ID must match your Java file -->
     <Button
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
@@ -39,7 +38,6 @@
         android:text="Sign In"
         android:layout_marginTop="16dp" />
 
-    <!-- 👇 Important: This ID must match your Java file -->
     <TextView
         android:id="@+id/tvSignUpLink"
         android:layout_width="wrap_content"

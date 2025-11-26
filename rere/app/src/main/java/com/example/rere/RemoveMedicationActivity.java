@@ -35,12 +35,8 @@ public class RemoveMedicationActivity extends AppCompatActivity {
         buttonBackHome = findViewById(R.id.buttonBackHome);
         medicationListContainer = findViewById(R.id.medicationListContainer);
 
-        if (buttonConfirmRemoval != null) {
-            buttonConfirmRemoval.setOnClickListener(v -> removeByName());
-        }
-        if (buttonBackHome != null) {
-            buttonBackHome.setOnClickListener(v -> finish());
-        }
+        buttonConfirmRemoval.setOnClickListener(v -> removeByName());
+        buttonBackHome.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -52,8 +48,6 @@ public class RemoveMedicationActivity extends AppCompatActivity {
     }
 
     private void removeByName() {
-        if (editTextRemoveName == null) return;
-
         String name = editTextRemoveName.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Enter a medication name", Toast.LENGTH_SHORT).show();
@@ -84,9 +78,16 @@ public class RemoveMedicationActivity extends AppCompatActivity {
     }
 
     private void refreshMedicationList() {
-        if (medicationListContainer == null) return;
-
         medicationListContainer.removeAllViews();
+
+        if (medicationList.isEmpty()) {
+            TextView empty = new TextView(this);
+            empty.setText("No medications saved.");
+            empty.setTextColor(0xFF88A79A);
+            empty.setPadding(8, 8, 8, 8);
+            medicationListContainer.addView(empty);
+            return;
+        }
 
         for (String med : medicationList) {
             LinearLayout row = new LinearLayout(this);
@@ -123,14 +124,6 @@ public class RemoveMedicationActivity extends AppCompatActivity {
             row.addView(tv);
             row.addView(btnRemove);
             medicationListContainer.addView(row);
-        }
-
-        if (medicationList.isEmpty()) {
-            TextView empty = new TextView(this);
-            empty.setText("No medications saved.");
-            empty.setTextColor(0xFF88A79A);
-            empty.setPadding(8, 8, 8, 8);
-            medicationListContainer.addView(empty);
         }
     }
 }

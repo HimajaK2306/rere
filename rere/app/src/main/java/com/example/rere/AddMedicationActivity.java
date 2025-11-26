@@ -213,4 +213,3 @@ public class AddMedicationActivity extends AppCompatActivity {
         return cs == null ? "" : cs.toString().trim();
     }
 }
- 

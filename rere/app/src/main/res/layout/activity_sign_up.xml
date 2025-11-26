@@ -9,18 +9,16 @@
     android:gravity="center"
     tools:context=".SignUpActivity">
 
-    <!-- New Welcome Text -->
     <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to RE&amp;RE ❤"
+        android:text="Welcome to RE&amp;RE"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_marginBottom="8dp" />
 
-    <!-- New Subtitle -->
     <TextView
         android:id="@+id/tvSubtitle"
         android:layout_width="wrap_content"
@@ -30,7 +28,6 @@
         android:textColor="@color/black"
         android:layout_marginBottom="24dp" />
 
-    <!-- Existing TextView for 'Create Account' -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,16 +36,6 @@
         android:textStyle="bold"
         android:layout_marginBottom="24dp" />
 
-    <!-- Existing Sign In link -->
-    <TextView
-        android:id="@+id/tvSignInLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Already have an account? Sign In"
-        android:textColor="@color/black"
-        android:layout_marginTop="24dp" />
-
-    <!-- Input fields -->
     <EditText
         android:id="@+id/etFirstName"
         android:layout_width="match_parent"
@@ -70,12 +57,19 @@
         android:hint="Password"
         android:inputType="textPassword" />
 
-    <!-- Sign Up button -->
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvSignInLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Sign In"
+        android:textColor="@color/black"
+        android:layout_marginTop="24dp" />
 
 </LinearLayout>

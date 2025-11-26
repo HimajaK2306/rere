@@ -1,11 +1,13 @@
 package com.example.rere;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SignInActivity extends AppCompatActivity {
@@ -14,71 +16,57 @@ public class SignInActivity extends AppCompatActivity {
     private Button btnSignIn;
     private TextView tvSignUpLink;
 
-    // Hardcoded valid users (for demo purposes)
-    private final String[][] validUsers = {
-            {"user1", "password1"},
-            {"user2", "password2"},
-            {"admin", "admin123"}
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        // Optional: hide ActionBar for a cleaner look
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // Initialize views
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        btnSignIn = findViewById(R.id.btnSignIn);
+        etUsername   = findViewById(R.id.etUsername);
+        etPassword   = findViewById(R.id.etPassword);
+        btnSignIn    = findViewById(R.id.btnSignIn);
         tvSignUpLink = findViewById(R.id.tvSignUpLink);
 
-        // Sign In button click
         btnSignIn.setOnClickListener(v -> {
-            String username = etUsername.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String user = etUsername.getText().toString().trim();
+            String pass = etPassword.getText().toString().trim();
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(SignInActivity.this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
+            if (user.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(this, "Enter username and password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            boolean isValid = false;
-            for (String[] user : validUsers) {
-                if (username.equals(user[0]) && password.equals(user[1])) {
-                    isValid = true;
-                    break;
-                }
+            SharedPreferences users = getSharedPreferences("users", MODE_PRIVATE);
+            String savedUser = users.getString(user + "_user", null);
+            String savedPass = users.getString(user + "_pass", null);
+
+            if (savedUser == null || savedPass == null) {
+                Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            if (isValid) {
-                Toast.makeText(SignInActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-
-                // 🔔 Notification
-                NotificationHelper.showNotification(
-                        this,
-                        "Welcome Back",
-                        "Signed in as " + username
-                );
-
-                // Navigate to HomePage
-                Intent intent = new Intent(SignInActivity.this, HomePageActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(SignInActivity.this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
+            if (!pass.equals(savedPass)) {
+                Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // store active session
+            getSharedPreferences("session", MODE_PRIVATE)
+                    .edit()
+                    .putString("active_user", user)
+                    .apply();
+
+            Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+
+            startActivity(new Intent(this, HomePageActivity.class));
+            finish();
         });
 
-        // Sign Up link click
         tvSignUpLink.setOnClickListener(v -> {
-            Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
-            startActivity(intent);
-            finish();
+            startActivity(new Intent(this, SignUpActivity.class));
         });
     }
 }

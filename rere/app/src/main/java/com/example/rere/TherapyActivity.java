@@ -1,3 +1,5 @@
+// File: app/src/main/java/com/example/rere/TherapyActivity.java
+
 package com.example.rere;
 
 import android.app.AlarmManager;
@@ -99,18 +101,19 @@ public class TherapyActivity extends AppCompatActivity {
             return;
         }
 
-        OverviewStatsManager.incrementTherapySessions(this);
+        // increment therapy counter for Quick Overview
+        OverviewStatsManager.increment(this, "therapy");
 
         String timeStr = new SimpleDateFormat("hh:mm a", Locale.US).format(selectedTime.getTime());
         String session = "Type: " + type + " | Time: " + timeStr;
         therapySessions.add(session);
         loadTherapySessions();
 
-        etTherapyType.setText("");
-        etTherapyTime.setText("");
-        selectedTime = null;
-
-        Toast.makeText(this, "Therapy session saved", Toast.LENGTH_SHORT).show();
+        // ✅ Schedule reminder BEFORE clearing selectedTime
+        Calendar reminderCal = (Calendar) selectedTime.clone();
+        if (reminderCal.getTimeInMillis() < System.currentTimeMillis()) {
+            reminderCal.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
         NotificationHelper.showNotification(
                 this,
@@ -118,23 +121,13 @@ public class TherapyActivity extends AppCompatActivity {
                 type + " at " + timeStr
         );
 
-        scheduleReminder(selectedTimeFromNow(timeStr), "Therapy Reminder: " + type + " at " + timeStr);
-    }
+        scheduleReminder(reminderCal, "Therapy Reminder: " + type + " at " + timeStr);
 
-    private Calendar selectedTimeFromNow(String timeStr) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(sdf.parse(timeStr));
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-                calendar.add(Calendar.DAY_OF_YEAR, 1);
-            }
-            return calendar;
-        } catch (Exception e) {
-            return Calendar.getInstance();
-        }
+        etTherapyType.setText("");
+        etTherapyTime.setText("");
+        selectedTime = null;
+
+        Toast.makeText(this, "Therapy session saved", Toast.LENGTH_SHORT).show();
     }
 
     private void scheduleReminder(Calendar calendar, String message) {
@@ -149,8 +142,12 @@ public class TherapyActivity extends AppCompatActivity {
         );
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        }
+        AlarmUtils.scheduleExactAlarm(
+                alarmManager,
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent
+        );
+
     }
 }

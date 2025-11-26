@@ -32,4 +32,3 @@ public class OverviewStatsManager {
         prefs(context).edit().remove(key).apply();
     }
 }
- 
