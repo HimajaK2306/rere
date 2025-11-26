@@ -9,7 +9,7 @@ public class ReminderReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String message = intent.getStringExtra("message");
-        Log.d("ReminderReceiver", "Triggered with message: " + message); // ✅ Log for debugging
+        Log.d("ReminderReceiver", "Triggered with message: " + message);
         NotificationHelper.showNotification(context, "Health Reminder", message);
     }
 }

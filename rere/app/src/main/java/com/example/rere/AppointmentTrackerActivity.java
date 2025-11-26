@@ -1,5 +1,3 @@
-// File: app/src/main/java/com/example/rere/AppointmentTrackerActivity.java
-
 package com.example.rere;
 
 import android.app.AlarmManager;
@@ -117,20 +115,12 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
             return;
         }
 
-        // unified counter
         OverviewStatsManager.increment(this, "appointments");
 
         String newAppt = "Clinic: " + clinic + " | Date: " + date + " | Time: " + time;
         appointments.add(newAppt);
         refreshAppointmentList();
 
-        NotificationHelper.showNotification(
-                this,
-                "Appointment Added",
-                "Appointment at " + clinic + " on " + date + " at " + time
-        );
-
-        // ✅ Use selectedTime with today's date, adjust into future
         scheduleReminder(time, newAppt);
 
         clearFields();
@@ -147,13 +137,11 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
         }
     }
 
-    // ✅ FIXED: use selectedTime instead of parsing "1970" date
     private void scheduleReminder(String time, String message) {
         if (selectedTime == null) return;
 
         Calendar c = (Calendar) selectedTime.clone();
 
-        // Make sure the reminder is in the future
         if (c.getTimeInMillis() < System.currentTimeMillis()) {
             c.add(Calendar.DAY_OF_YEAR, 1);
         }
@@ -170,7 +158,6 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        // ✅ Use safe exact alarm wrapper
         AlarmUtils.scheduleExactAlarm(
                 alarmManager,
                 AlarmManager.RTC_WAKEUP,
@@ -178,5 +165,4 @@ public class AppointmentTrackerActivity extends AppCompatActivity {
                 pendingIntent
         );
     }
-
 }

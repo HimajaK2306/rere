@@ -1,5 +1,3 @@
-// File: app/src/main/java/com/example/rere/TherapyActivity.java
-
 package com.example.rere;
 
 import android.app.AlarmManager;
@@ -101,7 +99,6 @@ public class TherapyActivity extends AppCompatActivity {
             return;
         }
 
-        // increment therapy counter for Quick Overview
         OverviewStatsManager.increment(this, "therapy");
 
         String timeStr = new SimpleDateFormat("hh:mm a", Locale.US).format(selectedTime.getTime());
@@ -109,17 +106,10 @@ public class TherapyActivity extends AppCompatActivity {
         therapySessions.add(session);
         loadTherapySessions();
 
-        // ✅ Schedule reminder BEFORE clearing selectedTime
         Calendar reminderCal = (Calendar) selectedTime.clone();
         if (reminderCal.getTimeInMillis() < System.currentTimeMillis()) {
             reminderCal.add(Calendar.DAY_OF_YEAR, 1);
         }
-
-        NotificationHelper.showNotification(
-                this,
-                "Therapy Session Saved",
-                type + " at " + timeStr
-        );
 
         scheduleReminder(reminderCal, "Therapy Reminder: " + type + " at " + timeStr);
 
@@ -148,6 +138,5 @@ public class TherapyActivity extends AppCompatActivity {
                 calendar.getTimeInMillis(),
                 pendingIntent
         );
-
     }
 }

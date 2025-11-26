@@ -152,14 +152,7 @@ public class AddMedicationActivity extends AppCompatActivity {
 
         String entry = entryBuilder.toString();
 
-        // Persist single source of truth
         MedicationStorage.addMedication(this, entry);
-
-        NotificationHelper.showNotification(
-                this,
-                "Medication Added",
-                name + " (" + dosage + ") has been saved."
-        );
 
         if (selectedTime != null) {
             scheduleReminder(selectedTime, "Time to take " + name + " (" + dosage + ")");
@@ -204,7 +197,6 @@ public class AddMedicationActivity extends AppCompatActivity {
                 calendar.getTimeInMillis(),
                 pendingIntent
         );
-
     }
 
     private String safeText(EditText et) {

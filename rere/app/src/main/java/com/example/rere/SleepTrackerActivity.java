@@ -89,7 +89,6 @@ public class SleepTrackerActivity extends AppCompatActivity {
             return;
         }
 
-        // FIXED — unified counter system
         OverviewStatsManager.increment(this, "sleep");
 
         String bedtimeStr = new SimpleDateFormat("hh:mm a", Locale.US).format(selectedTime.getTime());
@@ -98,12 +97,6 @@ public class SleepTrackerActivity extends AppCompatActivity {
         String log = "Bedtime: " + bedtimeStr + " | Message: " + message + " | Logged at: " + loggedAtStr;
         sleepLogs.add(log);
         refreshSleepLogs();
-
-        NotificationHelper.showNotification(
-                this,
-                "Sleep Reminder Set",
-                "At " + bedtimeStr + ": " + message
-        );
 
         scheduleReminder(selectedTime, "Sleep Reminder: " + message);
 
@@ -136,7 +129,6 @@ public class SleepTrackerActivity extends AppCompatActivity {
                 calendar.getTimeInMillis(),
                 pendingIntent
         );
-
     }
 
     private void refreshSleepLogs() {
