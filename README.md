@@ -132,3 +132,34 @@ User → Login → Home Screen
         → Therapy Tracker → DB Save → Notifications  
 
 
+## Data Persistence
+Data Stored Privately (Per-User)
+
+• All data is stored locally on the user’s device/account such as:
+• Clinic Name
+• Appointment Date & Time
+• Therapy Session Time & Type
+• Medication details
+• Sleep Goals
+• Sleep/Wake-up Times
+•Reminders (frequency, hours/day)
+• Data Shared Across Users
+
+### None
+This version of RE&RE does not share any data publicly or between users. All information remains private to the device/account.
+
+### Outside API Usage
+
+• The RE&RE app does not use any external API.
+• All data is processed locally.
+• Notifications are handled through Android Notification Manager, AlarmManager, or WorkManager.
+• No internet connection is required.
+• Future enhancements may include:
+• Calendar integration
+• Push-notification enhancements
+• Smart scheduling tools
+
+## Application Status
+
+All application functionalities are working as expected. Medication management, therapy tracking, sleep monitoring, appointment reminders, and all associated notifications have been successfully implemented and tested. The app is running smoothly and performing well across supported Android versions and devices.
+
