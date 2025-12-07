@@ -1,13 +1,14 @@
 # Remind-and-Recover
-
+Remind-and-Recover: Stay on Track, Never Miss a Beat
 ## 	App Name = RE&RE (Remind and Recover)
 
  ## Problem/Issue the App is Going to Address
-•	Many patients forget to take their prescribed medications or miss therapy routines on time, which delays recovery and affects overall health outcomes. Forgetfulness, busy schedules, or lack of proper tracking often leads to skipped doses, overdosing, or irregular therapy sessions.
+-	Many patients forget to take their prescribed medications or miss therapy routines on time, which delays recovery and affects overall health outcomes. Forgetfulness, busy schedules, or lack of proper tracking often leads to skipped doses, overdosing, or irregular therapy sessions.
+  
 The RE & RE app addresses this issue by:
-•	Sending users timely reminders with medicine name, dosage, and quantity.
-•	Helping users stay consistent with their recovery by sending notifications for daily routines such as therapy exercises, medication schedules, and proper sleep.
-•	Supporting users in building healthy habits that contribute to faster recovery and better long-term health outcomes.
+-	Sending users timely reminders with medicine name, dosage, and quantity.
+- Helping users stay consistent with their recovery by sending notifications for daily routines such as therapy exercises, medication schedules, and proper sleep.
+-	Supporting users in building healthy habits that contribute to faster recovery and better long-term health outcomes.
 
 ## Detailed Descriptions of Each Activity
 ## Activity 1: 
@@ -98,7 +99,7 @@ Each notification appears on the device at the exact user-defined time and works
  
 
 ## Data to Persist on the App:
-Persist on the app (private to one user)
+Persist on the app ((private to one user) roomdatabase SQLlite)
 1.	Things that belong only to the user and stay saved on their device/account.
 2.	Examples from your sketches:
 3.	Clinic Name
@@ -108,7 +109,6 @@ Persist on the app (private to one user)
 7.	Reminders (hrs/day)
 8.	Sleep Goal
 9.	Sleeping Time
-10.	Wakeup Time
 
 
 
@@ -175,7 +175,7 @@ This version of RE&RE does not share any data publicly or between users. All inf
 
 ### Outside API Usage
 
-- The RE&RE app does not use any external API.
+The RE&RE app does not use any external API.
 - All data is processed locally.
 - Notifications are handled through Android Notification Manager, AlarmManager, or WorkManager.
 - No internet connection is required.
@@ -186,7 +186,7 @@ This version of RE&RE does not share any data publicly or between users. All inf
 
 ## FUNCTION
 
-- The application incorporates all required Android components, including:
+The application incorporates all required components, including:
 - Multiple activities and intent-based navigation
 - Local data persistence using appropriate storage mechanisms
 - Android notification framework
